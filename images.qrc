@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/biconcave.png</file>
+        <file>images/biconvex.png</file>
+        <file>images/negative-meniscus.png</file>
+        <file>images/plano-concave.png</file>
+        <file>images/plano-convex.png</file>
+        <file>images/positive-meniscus.png</file>
+    </qresource>
+</RCC>
