@@ -18,6 +18,7 @@ public:
 
     void setValue(int value);
     int value();
+    void setMaximumValue(int max);
 
 signals:
     void valueChanged();

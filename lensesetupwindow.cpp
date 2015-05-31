@@ -9,8 +9,11 @@ LenseSetupWindow::LenseSetupWindow(QWidget *parent) :
 
     enabled = false;
 
+    ui->refractiveIndex->setMaximumValue(100);
+
     QObject::connect(ui->distance, SIGNAL(valueChanged()), this, SLOT(changeValue()));
     QObject::connect(ui->focus, SIGNAL(valueChanged()), this, SLOT(changeValue()));
+    QObject::connect(ui->refractiveIndex, SIGNAL(valueChanged()), this, SLOT(changeValue()));
 }
 
 LenseSetupWindow::~LenseSetupWindow()
@@ -33,6 +36,11 @@ int LenseSetupWindow::type()
     return ui->typeChooser->currentIndex();
 }
 
+int LenseSetupWindow::refractiveIndex()
+{
+    return ui->refractiveIndex->value();
+}
+
 void LenseSetupWindow::setFocus(int focus)
 {
     ui->focus->setValue(focus);
@@ -48,7 +56,9 @@ void LenseSetupWindow::setEnabled(bool checked)
     ui->typeChooser->setEnabled(checked);
     ui->focus->setEnabled(checked);
     ui->distance->setEnabled(checked);
+    ui->refractiveIndex->setEnabled(checked);
     ui->clearButton->setEnabled(checked);
+
     ui->checkBox->setChecked(checked);
 
 //    enabled = !enabled;
@@ -71,6 +81,7 @@ void LenseSetupWindow::on_checkBox_toggled(bool checked)
     ui->focus->setEnabled(checked);
     ui->distance->setEnabled(checked);
     ui->clearButton->setEnabled(checked);
+    ui->refractiveIndex->setEnabled(checked);
 
     enabled = !enabled;
     emit stateChanged();

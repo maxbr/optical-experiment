@@ -73,6 +73,8 @@ void MainWindow::drawExperiment()
             const float distance = lenses[i]->distance();
             // Если линза рассеивающая, то фокус - отрицательный
             const float focus = (type < 3 ? 1: -1) * lenses[i]->focus();
+            // коэффициент преломления
+            const float refractiveIndex = 1.0 + lenses[i]->refractiveIndex() / 100.0;
 
             if (focus && distance) {
                 if (type < 3 && focus == distance) {
@@ -118,9 +120,9 @@ void MainWindow::drawExperiment()
 
                 // Отрисовка преобразованного иображения
                 // Считаем L_i (расстояние между линзой и объектом)
-                float L_i = (focus * distance) / (distance - focus);
+                float L_i = refractiveIndex * (focus * distance) / (distance - focus);
                 // Считаем D (соотношение)
-                float D = -L_i/distance;
+                float D = refractiveIndex * -L_i/distance;
 
                 // Обновление параметров промежуточного объекта для последующих линз
                 objectHeight = objectHeight * D;
@@ -138,17 +140,20 @@ void MainWindow::drawExperiment()
                     orientation *= -1;
 
                 // Отрисовка "замечательных" лучей
-                // Линия через центр линзы
+                // Линия от верхнего края объекта до центра линзы центр линзы
                 QPointF objectTopPoint(commonOffset + 1, sceneHeight/2 + orientation * objectHeight / D);
-                QPointF lenCenter(commonOffset + distance + L_i, sceneHeight/2 + orientation * objectHeight);
-
+                QPointF lenCenter(commonOffset + distance, sceneHeight/2);
                 QLineF firstRayLine(objectTopPoint, lenCenter);
-
                 scene->addLine(firstRayLine, *pens[DashRed]);
+                // Линия от центра линзы до края полученного изображения
+                QPointF objectBottomPoint(commonOffset + distance + L_i, sceneHeight/2 + orientation * objectHeight);
+                QLineF firstRayLineSecondPart(objectBottomPoint, lenCenter);
+                scene->addLine(firstRayLineSecondPart, *pens[DashRed]);
+
                 // параллельная главной оси
                 scene->addLine(commonOffset + 1, objectTopPoint.y(), commonOffset + distance, objectTopPoint.y(), *pens[DashRed]);
                 // дополняющая вышеописанную
-                QPointF endPoint(commonOffset + distance + L_i, lenCenter.y());
+                QPointF endPoint(commonOffset + distance + L_i, lenCenter.y() - objectHeight);
 
                 if (focus < 0) {
                     endPoint.setX(commonOffset + distance + focus);

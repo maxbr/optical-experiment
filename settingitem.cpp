@@ -41,4 +41,10 @@ int SettingItem::value()
     return ui->spinBox->value();
 }
 
+void SettingItem::setMaximumValue(int max)
+{
+    ui->spinBox->setMaximum(max);
+    ui->horizontalSlider->setMaximum(max);
+}
+
 

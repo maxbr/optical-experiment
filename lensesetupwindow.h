@@ -22,6 +22,7 @@ public:
     int focus();
     int distance();
     int type();
+    int refractiveIndex();
 
     void setFocus(int focus);
     void setDistance(int distance);
